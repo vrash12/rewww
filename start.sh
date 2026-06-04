@@ -1,17 +1,18 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "Starting AmoraCare Qwen vLLM service..."
+echo "Starting Qwen vLLM service..."
 echo "PORT=${PORT:-8080}"
 echo "MODEL_ID=${MODEL_ID:-Qwen/Qwen3-4B-Instruct-2507}"
 echo "SERVED_MODEL_NAME=${SERVED_MODEL_NAME:-qwen3-4b}"
-echo "MAX_MODEL_LEN=${MAX_MODEL_LEN:-4096}"
+echo "MAX_MODEL_LEN=${MAX_MODEL_LEN:-2048}"
+echo "GPU_MEMORY_UTILIZATION=${GPU_MEMORY_UTILIZATION:-0.70}"
 
 export PORT="${PORT:-8080}"
 export MODEL_ID="${MODEL_ID:-Qwen/Qwen3-4B-Instruct-2507}"
 export SERVED_MODEL_NAME="${SERVED_MODEL_NAME:-qwen3-4b}"
-export MAX_MODEL_LEN="${MAX_MODEL_LEN:-4096}"
-export GPU_MEMORY_UTILIZATION="${GPU_MEMORY_UTILIZATION:-0.80}"
+export MAX_MODEL_LEN="${MAX_MODEL_LEN:-2048}"
+export GPU_MEMORY_UTILIZATION="${GPU_MEMORY_UTILIZATION:-0.70}"
 
 if [ -n "${HF_TOKEN:-}" ] && [ -z "${HUGGING_FACE_HUB_TOKEN:-}" ]; then
   export HUGGING_FACE_HUB_TOKEN="${HF_TOKEN}"
