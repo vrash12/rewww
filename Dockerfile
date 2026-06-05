@@ -1,20 +1,24 @@
-FROM vllm/vllm-openai:latest
+FROM pytorch/pytorch:2.5.1-cuda12.1-cudnn9-runtime
 
 WORKDIR /app
 
-COPY start.sh /app/start.sh
-COPY proxy_server.py /app/proxy_server.py
-
-RUN sed -i 's/\r$//' /app/start.sh && chmod +x /app/start.sh
-
-RUN pip install --no-cache-dir fastapi uvicorn httpx
-
+ENV PYTHONUNBUFFERED=1
+ENV PORT=8080
 ENV MODEL_ID="Qwen/Qwen3-4B-Instruct-2507"
 ENV SERVED_MODEL_NAME="qwen3-4b"
-ENV MAX_MODEL_LEN="2048"
-ENV GPU_MEMORY_UTILIZATION="0.70"
-ENV PORT="8080"
-ENV VLLM_PORT="8000"
-ENV VLLM_NO_USAGE_STATS="1"
+ENV HF_HOME="/tmp/huggingface"
+ENV TRANSFORMERS_CACHE="/tmp/huggingface"
+ENV TORCH_HOME="/tmp/torch"
 
-ENTRYPOINT ["/bin/bash", "/app/start.sh"]
+RUN pip install --no-cache-dir \
+    fastapi \
+    uvicorn[standard] \
+    transformers>=4.51.0 \
+    accelerate \
+    safetensors \
+    sentencepiece \
+    huggingface_hub
+
+COPY server.py /app/server.py
+
+CMD ["python", "server.py"]
